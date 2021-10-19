@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/author/#{author.id}/update", method="post")
+    fieldset
+      legend Actor
+      p Id #{author.id}
+      p Última actualización #{author.lastUpdate}
+      p Nombre
+        input(type="text", name="firstName", id="firstName", placeholder="Nombre", value="#{author.firstName}")
+      p Apellido
+        input(type="text", name="lastName", id="lastName", placeholder="Apellido", value="#{author.lastName}")
+      p
+        input(type="submit", value="Actualizar actor")

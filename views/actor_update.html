@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/author/{{id}}/update" method="post">
+        <fieldset>
+            <legend>Actor</legend>
+            <p>
+                Nombre
+                <input type="text" name="firstName" id="firstName" placeholder="Nombre" value="{{firstName}}" />
+            </p>
+            <p>
+                Apellido
+                <input type="text" name="lastName" id="lastName" placeholder="Apellido" value="{{lastName}}" />
+            </p>
+            <p>
+                <input type="submit" value="Actualizar actor" />
+            </p>
+        </fieldset>
+    </form>
+    <script>
+        const formulario = document.getElementsByTagName("form")[0];
+        formulario.addEventListener("submit", function (event) {
+            //sendPostAsyncForm();
+            //event.preventDefault();
+        });
+
+        function sendPostAsyncForm() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", '/server', true);
+
+            //Send the proper header information along with the request
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () { // Call a function when the state changes.
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    // Request finished. Do processing here.
+                }
+            }
+            let body = "";
+            for (const e of formulario.elements) {
+                console.log("form element", e.name, e.checked, e.nodeName, e.nodeValue, e.nodeType);
+                if ((e.type == "radio" || e.type == "checkbox") && !e.checked) continue;
+                if (e.name) {
+                    if (body) body += "&";
+                    body += e.name + "=" + e.value;
+                }
+            }
+            console.log("body", body);
+            xhr.send(body);
+            // xhr.send(new Int8Array());
+            // xhr.send(document);
+
+        }
+    </script>
+</body>
+</html>

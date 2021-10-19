@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  a(href="/") Indice
+  h1= title
+  a(href="/author/create") Crear actor
+  div
+    div Id
+    div First name
+    div Last name
+    div Last update
+    div Editar
+    div Eliminar
+  each i in authors
+    div
+      div #{i.id}
+      div #{i.firstName}
+      div #{i.lastName}
+      div #{i.lastUpdate}
+      div
+        a(href="/author/#{i.id}/update") Editar actor
+      div
+        a(href="/author/#{i.id}/delete") Elminar actor      

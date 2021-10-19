@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/author/create", method="post")
+    fieldset
+      legend Datos
+      p
+        input(type="text", name="firstName", id="firstName", placeholder="Nombre")
+      p
+        input(type="text", name="lastName", id="lastName", placeholder="Apellido")
+      p
+        input(type="submit", value="Crear actor")

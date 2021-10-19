@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  form(action="/author/#{author.id}/delete", method="post")
+    fieldset
+      legend Actor
+      p Id #{author.id}
+      p Nombre #{author.firstName}
+      p Apellido #{author.lastName}
+      p Última actualización #{author.lastUpdate}
+      p
+        input(type="submit", value="Eliminar actor")
