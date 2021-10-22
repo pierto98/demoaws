@@ -22,7 +22,9 @@ async function authorGet(id) {
                         if (rows.length > 0)
                             resolve(record(rows[0]));
                     });
-            }).then((a) => a)
+            }).then(function(objeto){
+                return objeto;
+            })
             .catch((err) => console.log("author async authorGet connection query promise catch err", err));
     }
     catch (err) {
@@ -50,7 +52,9 @@ async function authorList() {
                         }
                         resolve(l);
                     });
-            }).then((l) => l)
+            }).then(function(arreglo){
+                return arreglo;
+            })
             .catch((err) => console.log("author async authorList connection query promise catch err", err));
     }
     catch (err) {
@@ -70,9 +74,9 @@ async function authorAdd(firstName, lastName) {
 
         return await new Promise((resolve, reject) => {
                 conn.query("insert into actor(first_name, last_name) values(?, ?)", [firstName, lastName],
-                    function(err, rows, fields) {
+                    function(err, result, fields) {
                         if (err) throw err;
-                        resolve(rows);
+                        resolve(result);
                     });
             }).then((r) => r.insertId)
             .catch((err) => console.log("author async authorAdd connection query promise catch err", err));
@@ -94,9 +98,9 @@ async function authorUpdate(id, firstName, lastName) {
 
         return await new Promise((resolve, reject) => {
                 conn.query("update actor set first_name=?, last_name=? where actor_id=?", [firstName, lastName, id],
-                    function(err, rows, fields) {
+                    function(err, result, fields) {
                         if (err) throw err;
-                        resolve(rows);
+                        resolve(result);
                     });
             })
             .then((r) => r.affectedRows)
@@ -120,9 +124,9 @@ async function authorDelete(id) {
 
         return await new Promise((resolve, reject) => {
                 conn.query("delete from actor where actor_id=?", id,
-                    function(err, rows, fields) {
+                    function(err, result, fields) {
                         if (err) throw err;
-                        resolve(rows);
+                        resolve(result);
                     });
             })
             .then((r) => r.affectedRows)

@@ -4,7 +4,7 @@ var author_controller = require('../controllers/authorController');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express', date: new Date() });
+  res.render('index', { title: 'Express 1.6', date: new Date() });
 });
 
 /// AUTHOR ROUTES ///

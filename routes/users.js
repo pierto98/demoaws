@@ -26,4 +26,8 @@ router.post('/:id/update', user_controller.user_update_post);
 // GET request for one Author.
 router.get('/:id', user_controller.user_detail);
 
+router.post('/api/create/', user_controller.user_create_post);
+router.put('/api/update', user_controller.user_update_post);
+router.delete('/api/delete', user_controller.user_delete_post);
+
 module.exports = router;

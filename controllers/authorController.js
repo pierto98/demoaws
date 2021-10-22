@@ -1,9 +1,9 @@
 var fs = require("fs");
 var Author = require('../models/author');
-const HTML = false;
+const HTML = true;
 
 
-async function author_list(res) {
+async function author_list_asincronica(res) {
     const l = await Author.list();
     console.log("actors list", l.length);
     if (HTML) {
@@ -20,7 +20,7 @@ async function author_list(res) {
 
 // Display list of all Authors.
 exports.author_list = async function(req, res) {
-    await author_list(res);
+    await author_list_asincronica(res);
 };
 
 // Display detail page for a specific Author.
@@ -36,7 +36,7 @@ exports.author_create_get = function(req, res) {
         res.send(fs.readFileSync("./views/actor_create.html", "utf8"));
     }
     else {
-        res.render("actor_create", { title: "Crear actor" });
+        res.render("actor_create", { title: "Crear actor jade" });
     }
 };
 
@@ -46,7 +46,7 @@ exports.author_create_post = async function(req, res) {
     console.log("lastName", req.body.lastName);
     const id = await Author.add(req.body.firstName, req.body.lastName);
     console.log("actor created id", id);
-    await author_list(res);
+    await author_list_asincronica(res);
 };
 
 // Display Author delete form on GET.
@@ -69,7 +69,8 @@ exports.author_delete_get = async function(req, res) {
 exports.author_delete_post = async function(req, res) {
     console.log("id", req.params.id);
     const rows = await Author.delete(req.params.id);
-    await author_list(res);
+    console.log("rows", rows);
+    await author_list_asincronica(res);
 };
 
 // Display Author update form on GET.
@@ -93,5 +94,6 @@ exports.author_update_post = async function(req, res) {
     console.log("firstName", req.body.firstName);
     console.log("lastName", req.body.lastName);
     const rows = await Author.update(req.params.id, req.body.firstName, req.body.lastName);
-    await author_list(res);
+    console.log("rows", rows);
+    await author_list_asincronica(res);
 };
