@@ -15,7 +15,7 @@ async function authorGet(id) {
         conn = mysql.connection();
         conn.connect();
 
-        return await new Promise((resolve, reject) => {
+        let author = await new Promise((resolve, reject) => {
                 conn.query("select * from actor where actor_id=?", id,
                     function(err, rows, fields) {
                         if (err) throw err;
@@ -26,6 +26,8 @@ async function authorGet(id) {
                 return objeto;
             })
             .catch((err) => console.log("author async authorGet connection query promise catch err", err));
+        console.log("author", author);  
+        return author;
     }
     catch (err) {
         console.log("author async authorGet err", err);
@@ -78,7 +80,9 @@ async function authorAdd(firstName, lastName) {
                         if (err) throw err;
                         resolve(result);
                     });
-            }).then((r) => r.insertId)
+            }).then(function(r){ //r=>r.insertId
+                return r.insertId; //código generado desde mysql
+            })
             .catch((err) => console.log("author async authorAdd connection query promise catch err", err));
     }
     catch (err) {
@@ -103,7 +107,9 @@ async function authorUpdate(id, firstName, lastName) {
                         resolve(result);
                     });
             })
-            .then((r) => r.affectedRows)
+            .then(function(r){
+                return r.affectedRows;
+            })
             .catch((err) => console.log("author async authorUpdate connection query promise catch err", err));
     }
     catch (err) {
@@ -129,7 +135,9 @@ async function authorDelete(id) {
                         resolve(result);
                     });
             })
-            .then((r) => r.affectedRows)
+            .then(function(r){
+                return r.affectedRows;
+            })
             .catch((err) => console.log("author async authorDelete connection query promise catch err", err));
     }
     catch (err) {

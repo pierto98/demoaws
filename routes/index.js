@@ -2,10 +2,13 @@ var express = require('express');
 var router = express.Router();
 var author_controller = require('../controllers/authorController');
 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express 1.6', date: new Date() });
+  res.render('index', { title: 'Express 1.6 jade', date: new Date() });
 });
+
+router.post("/author/post", author_controller.author_post);
 
 /// AUTHOR ROUTES ///
 // GET request for creating Author. NOTE This must come before route for id (i.e. display author).
@@ -31,5 +34,7 @@ router.get('/author/:id', author_controller.author_detail);
 
 // GET request for list of all Authors.
 router.get('/authors', author_controller.author_list);
+
+router.post("/server", author_controller.author_server);
 
 module.exports = router;

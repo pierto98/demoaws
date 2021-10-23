@@ -1,7 +1,7 @@
 var fs = require("fs");
+const body = require("./body-parser");
 var Author = require('../models/author');
-const HTML = true;
-
+const HTML = false;
 
 async function author_list_asincronica(res) {
     const l = await Author.list();
@@ -14,9 +14,14 @@ async function author_list_asincronica(res) {
         res.send(page.replace("{{actorsList}}", text));
     }
     else {
-        res.render("actors", { authors: l, title: "Lista de actores" });
+        res.render("actors", { authors: l, title: "Lista de actores jade" });
     }
 }
+
+exports.author_post = async function(req, res, next) {
+    const id = await Author.add(req.body.firstName, req.body.lastName);
+    res.send(JSON.stringify(await Author.get(id)));
+};
 
 // Display list of all Authors.
 exports.author_list = async function(req, res) {
@@ -84,7 +89,7 @@ exports.author_update_get = async function(req, res) {
             .replace("{{lastName}}", author.lastName));
     }
     else {
-        res.render("actor_update", { author, title: "Actualizar actor" });
+        res.render("actor_update", { author, title: "Actualizar actor jade" });
     }
 };
 
@@ -96,4 +101,21 @@ exports.author_update_post = async function(req, res) {
     const rows = await Author.update(req.params.id, req.body.firstName, req.body.lastName);
     console.log("rows", rows);
     await author_list_asincronica(res);
+};
+
+exports.author_server = async function(req, res) {
+    console.log("date", new Date());
+    console.log("req.url", req.url);
+    //console.log("req.headers", req.headers);
+    console.log("req.method", req.method);
+    console.log("req.query", req.query);
+    console.log("req.params", req.params);
+    console.log("req.body default", JSON.stringify(req.body));
+
+    ///parse multipart/form-data text body request
+    await body.parse(req);
+
+    console.log("req.body parsed", JSON.stringify(req.body));
+    res.write("NOT IMPLEMENTED /server POST method \n<br>");
+    res.end(`req.params ${JSON.stringify(req.params)} req.body ${JSON.stringify(req.body)}`);
 };

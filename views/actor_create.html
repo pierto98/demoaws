@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
+
 <body>
     <h1>Crear actor HTML</h1>
     <form action="/author/create" method="post">
@@ -21,41 +23,102 @@
                 <input type="submit" value="Crear actor" />
             </p>
         </fieldset>
+        <input type="hidden" value="anyvalue" />
     </form>
     <script>
         const formulario = document.getElementsByTagName("form")[0];
-        formulario.addEventListener("submit", function (event) {
-            //sendPostAsyncForm();
+        formulario.addEventListener("submit", function(event) {
             //event.preventDefault();
+            //sendPostAsyncForm();
+
         });
 
         function sendPostAsyncForm() {
+            const url = "/server";
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", '/server', true);
+            xhr.open("POST", url, true);
 
             //Send the proper header information along with the request
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            //xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");// charset=utf-8; boundary=post-field-boundary");
+            xhr.setRequestHeader("Content-Type", "application/JSON");
+            //xhr.setRequestHeader("Content-Type", "multipart/form-data");// charset=utf-8; boundary=post-field-boundary");
 
-            xhr.onreadystatechange = function () { // Call a function when the state changes.
+            xhr.onreadystatechange = function() { // Call a function when the state changes.
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    console.log("XMLHttpRequest readystatechange responseText", this.responseText);
                     // Request finished. Do processing here.
                 }
             }
             let body = "";
-            for (const e of formulario.elements) {
-                console.log("form element", e.name, e.checked, e.nodeName, e.nodeValue, e.nodeType);
-                if ((e.type == "radio" || e.type == "checkbox") && !e.checked) continue;
-                if (e.name) {
-                    if (body) body += "&";
-                    body += e.name + "=" + e.value;
+            body = {};
+            //body = new FormData();
+            console.log("typeof body", typeof(body));
+            for (const _e of formulario.elements) {
+                console.log("form element", "name", _e.name,
+                    "checked", _e.checked, "nodeName", _e.nodeName,
+                    "nodeValue", _e.nodeValue,
+                    "nodeType", _e.nodeType, "value", _e.value);
+                if ((_e.type == "radio" || _e.type == "checkbox") &&
+                    !_e.checked) continue;
+                if (_e.name) {
+                    if (typeof(body) == "object") {
+                        if (body.constructor == FormData) {
+                            body.append(_e.name, _e.value);
+                            for (const _d of body)
+                                console.log("body value", "key", _d[0], "value", _d[1]);
+                        }
+                        else {
+                            body[_e.name] = _e.value;
+                            console.log("body", JSON.stringify(body));
+                        }
+                    }
+                    else {
+                        if (body) body += "&";
+                        body += _e.name + "=" + _e.value;
+                        console.log("body", body);
+                    }
                 }
             }
-            console.log("body", body);
+            //body=new FormData(formulario);
+            console.log("body", JSON.stringify(body));
+            if (typeof(body) == "object" && body.constructor == FormData)
+                for (const _d of body)
+                    console.log("body value", "key", _d[0], "value", _d[1]);
+            console.log("send async");
+            //xhr.send("firstName=PENELOPE&lastName=GUINESS");
+            //xhr.send('{"nombre": "valorNombre", "apellido": "valorApellido"}');
+            //xhr.send(JSON.stringify({nombre: "valorNombre", apellido: "valorApellido"}));
+            //xhr.send(JSON.stringify(body));
             xhr.send(body);
             // xhr.send(new Int8Array());
             // xhr.send(document);
 
+            window.fetch(url, {
+                    method: "post",
+                    headers: {
+                        'Content-Type': typeof(body) == "object" ?
+                            body.constructor == FormData ?
+                            'multipart/form-data' :
+                            'application/json' :
+                            body.search(/[&=]/) >= 0 ?
+                            'application/x-www-form-urlencoded' : 'application/json'
+                    },
+                    body: typeof(body) == "object" ?
+                        body.constructor == FormData ?
+                        body :
+                        JSON.stringify(body) :
+                        body
+                })
+                .then(res => {
+                    console.log("fetch post FormData then");
+                    console.log("ok", res.ok);
+                    console.log("status", res.status);
+                    return res.text();
+                })
+                .then(text => console.log("text", text));
+
         }
     </script>
 </body>
+
 </html>
