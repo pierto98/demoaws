@@ -116,6 +116,8 @@ exports.author_server = async function(req, res) {
     await body.parse(req);
 
     console.log("req.body parsed", JSON.stringify(req.body));
+    console.log("req.cookies", req.cookies);
+    res.clearCookies();
     res.write("NOT IMPLEMENTED /server POST method \n<br>");
     res.end(`req.params ${JSON.stringify(req.params)} req.body ${JSON.stringify(req.body)}`);
 };

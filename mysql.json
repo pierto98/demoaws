@@ -1,0 +1,6 @@
+{
+    "host": "localhost",
+    "user": "webapp",
+    "password": "webapp@mysql",
+    "database": "sakila"
+}
