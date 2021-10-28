@@ -21,6 +21,7 @@ async function authorGet(id) {
                         if (err) throw err;
                         if (rows.length > 0)
                             resolve(record(rows[0]));
+                        else reject("registro sin datos");
                     });
             }).then(function(objeto){
                 return objeto;

@@ -7,9 +7,17 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Actualizar actor HTML</h1>
     <form action="/author/{{id}}/update" method="post">
         <fieldset>
             <legend>Actor</legend>
+            <p>
+                Id
+                {{id}}
+            </p>
+            <p>
+                Última actualización {{lastUpdate}}
+            </p>
             <p>
                 Nombre
                 <input type="text" name="firstName" id="firstName" placeholder="Nombre" value="{{firstName}}" />

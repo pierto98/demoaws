@@ -1,7 +1,7 @@
 var fs = require("fs");
 const body = require("./body-parser");
 var Author = require('../models/author');
-const HTML = false;
+const HTML = true;
 
 async function author_list_asincronica(res) {
     const l = await Author.list();
@@ -23,6 +23,18 @@ exports.author_post = async function(req, res, next) {
     res.send(JSON.stringify(await Author.get(id)));
 };
 
+exports.author_put = async function(req, res, next){
+    const rows = await Author.update(req.body.id, req.body.firstName, req.body.lastName);
+    res.send(`${rows} registros actualizados`);
+};
+
+exports.author_delete = async function(req, res, next){
+    const reg = await Author.get(req.body.id); 
+    const rows = await Author.delete(req.body.id);
+    if(rows>0) res.send(JSON.stringify(reg));
+    else res.send(`${rows} registros eliminados`);
+};
+
 // Display list of all Authors.
 exports.author_list = async function(req, res) {
     await author_list_asincronica(res);
@@ -30,8 +42,8 @@ exports.author_list = async function(req, res) {
 
 // Display detail page for a specific Author.
 exports.author_detail = async function(req, res) {
-    const a = await Author.get(req.params.id);
-    res.send(JSON.stringify(a));
+    const reg = await Author.get(req.params.id);
+    res.send(JSON.stringify(reg));
 };
 
 // Display Author create form on GET.
@@ -66,7 +78,7 @@ exports.author_delete_get = async function(req, res) {
             .replace("{{lastUpdate}}", author.lastUpdate));
     }
     else {
-        res.render("actor_delete", { author, title: "Eliminar actor" });
+        res.render("actor_delete", { author, title: "Eliminar actor jade" });
     }
 };
 
@@ -84,7 +96,8 @@ exports.author_update_get = async function(req, res) {
     const author = await Author.get(req.params.id);
     if (HTML) {
         res.send(fs.readFileSync("./views/actor_update.html", "utf8")
-            .replace("{{id}}", author.id)
+            .replace(/{{id}}/g, author.id)
+            .replace("{{lastUpdate}}", author.lastUpdate)
             .replace("{{firstName}}", author.firstName)
             .replace("{{lastName}}", author.lastName));
     }
