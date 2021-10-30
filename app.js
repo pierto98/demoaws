@@ -2,10 +2,10 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-//var session = require("express-session");
-//var MySqlSession = require("express-mysql-session")(session);
+var session = require("express-session");
+var MySqlSession = require("express-mysql-session")(session);
 var logger = require('morgan');
-//var mysqlsession = new MySqlSession(require("./mysql.json"));
+var mysqlsession = new MySqlSession(require("./mysql.json"));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -20,17 +20,17 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-/*
+
 app.use(session({
   name: "node-session-express",
   secret: "secretforcryptedmessagesfromsessionmodule",
   resave: false,
   saveUninitialized: false,
-  //store: mysqlsession,  //sets mysqlsession object
+  store: mysqlsession,  //sets mysqlsession object
   cookie: {
     maxAge: 1*60*30/60*60*1000 //30 min
   }
-}));*/
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 /*

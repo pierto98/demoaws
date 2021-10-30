@@ -4,9 +4,9 @@ var author_controller = require('../controllers/authorController');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  /*console.log("cookies", typeof(req.cookies), req.cookies);
-  //console.log("session", typeof(req.session), req.session);
-  const date=new Date();
+  console.log("cookies", typeof(req.cookies), req.cookies);
+  console.log("session", typeof(req.session), req.session);
+  /*const date=new Date();
   date.setFullYear(date.getFullYear()+6);
   res.cookie("index", ((parseInt(req.cookies.index)||0)+1).toString(), {path:"/", expires:date});
   //req.session.stats = (req.session.stats || 0)+1;
@@ -17,10 +17,18 @@ router.get('/', function(req, res, next) {
 
 router.get("/cookies", function(req, res, next){
   console.log("fecha", new Date());
-  console.log("cookies", req.cookies);
+  console.log("cookies antes de actualizar", req.cookies);
   const accesos=req.cookies.accesos||"0";
-  res.cookie("accesos", parseInt(accesos)+1, {maxAge: 10*60*1000, httpOnly: true});
+  req.cookies.accesos=accesos+"11";
+  res.cookie("accesos", parseInt(accesos)+1, {maxAge: 3*60*1000, httpOnly: true});
   res.cookie("index", "9");
+  res.cookie("https", "1", {secure: true});
+  console.log("cookies despues de actualizar", req.cookies);
+  
+  
+  console.log("session antes de actualizar", req.session);
+  req.session.accesos = (req.session.accesos||0)+1;
+  console.log("session después de actualizar", req.session);
   res.render('index', { title: 'Express 1.6 jade cookies de acceso', date: new Date() })
 });
 
